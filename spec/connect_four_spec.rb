@@ -45,7 +45,7 @@ describe Board do
             end
             it 'does not place the player\'s piece if the index is invalid' do
                 board = Board.new
-                board.make_move(O, 'X')
+                board.make_move(0, 'X')
                 expect(board.cells).to eql([
                     ['','','','','','',''],
                     ['','','','','','',''],
