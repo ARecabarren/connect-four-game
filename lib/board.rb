@@ -25,6 +25,51 @@ class Board
         nil
     end
 
+    def ask_player_for_move
+        puts "#{@current_player}, enter the column number (1-7): "
+        gets.chomp.to_i
+    end
 
+    def display_board
+        @cells.each do |row|
+            puts row.join(' ')
+        end
+    end
 
+    # def switch_player
+    #     @current_player = @players.find{|player| != @current_player}
+    # end
+
+    def game_over?
+        
+    end
+
+    def check_winner
+        # Horizontal check
+        @cells.each do |row|
+            return true if row.join('').include?(@current_player * 4)
+        end
+
+        # Vertical check
+        columns = @cells.transpose
+        columns.each do |column|
+            return true if column.join('').include?(@current_player * 4)
+        end
+
+        # Diagonals left to right
+        (0..2).each do |row|
+            (0..3).each do |column|
+                return true if [@cells[row][column], @cells[row + 1][column + 1], @cells[row + 2][column + 2], @cells[row + 3][column + 3]].join('').include?(@current_player * 4)
+            end
+        end
+
+        # Diagonals left to right
+        (0..2).each do |row|
+            (3..6).each do |column|
+                return true if [@cells[row][column], @cells[row + 1][column - 1], @cells[row + 2][column - 2], @cells[row + 3][column - 3]].join('').include?(@current_player * 4)
+            end
+        end
+
+        false
+    end
 end
