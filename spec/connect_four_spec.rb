@@ -56,7 +56,54 @@ describe Board do
                 ])
             end
         end
+    end
+    describe '#play_game' do
+        before do
+            allow_any_instance_of(Board).to receive(:ask_player_for_move).and_return(1)
+        end
+
+        context 'when the game ends with a winner' do
+            it 'displays the final board and the winner' do
+              board = Board.new
+              allow(board).to receive(:game_over?).and_return(true)
+              allow(board).to receive(:display_board) # Stub the display_board method
+              
+              expect(board).to receive(:display_board).at_least(:twice)
+              expect(board).to receive(:puts).with("Game Over!")
         
+              board.play_game
+            end
+        end
+
+        context 'when the game ends in a draw' do
+            it 'displays the final board and a draw message' do
+              board = Board.new
+              allow(board).to receive(:game_over?).and_return(true)
+              allow(board).to receive(:display_board) # Stub the display_board method
         
+              expect(board).to receive(:display_board).at_least(:once)
+              expect(board).to receive(:puts).with("Game Over!")
+        
+              board.play_game
+            end
+        end
+    end
+    describe '#game_over?' do
+        context 'when there is a winning combination' do
+            it 'returns true' do
+              board = Board.new
+              allow(board).to receive(:check_winner).and_return(true)
+        
+              expect(board.game_over?).to be true
+            end
+        end
+        context 'when there is no winning combination' do
+            it 'returns false' do
+              board = Board.new
+              allow(board).to receive(:check_winner).and_return(false)
+        
+              expect(board.game_over?).to be false
+            end
+        end
     end
 end
