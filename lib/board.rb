@@ -1,6 +1,6 @@
 class Board
     attr_reader :cells
-    attr_accessor :cells
+    attr_accessor :cells, :player2, :player1
     def initialize
         @cells = Array.new(6) {Array.new(7) {''} }
         @players = ['X', 'O']
@@ -10,8 +10,7 @@ class Board
     def play_game
         loop do
             display_board
-            column = ask_player_for_move
-            make_move(column, @current_player)
+            column = ask_player_for_move            make_move(column, @current_player[:symbol])
             
             if game_over?
                 display_board
@@ -21,6 +20,18 @@ class Board
       
             switch_player
         end
+    end
+
+    def set_players
+        puts "Enter Player's 1 name:"
+        player1_name = gets.chomp
+        puts "Enter Player's 2 name"
+        player2_name = gets.chomp
+
+        @player1 = {name: player1_name, symbol: 'X'}
+        @player2 = {name: player2_name, symbol: 'O'}
+
+        @current_player = @player1
     end
 
     def make_move(column, player_piece)
