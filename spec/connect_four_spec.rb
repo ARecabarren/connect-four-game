@@ -105,5 +105,40 @@ describe Board do
               expect(board.game_over?).to be false
             end
         end
+        context 'when the board is full' do
+            it 'return true' do
+                board = Board.new
+                allow(board).to receive(:board_full?).and_return(true)
+                expect(board.game_over?).to be true
+            end
+        end
+    end
+    describe '#board_full?' do
+        it 'returns false is there is space available' do
+            board = Board.new
+            board.cells = [
+                ['O','','','','','',''],
+                ['','','','','','',''],
+                ['','X','','','','',''],
+                ['','','X','','','',''],
+                ['','','','X','','',''],
+                ['','','','0','0','X','X']
+            ]
+            expect(board.board_full?).to be false
+        end
+        it 'return true if the board is full' do
+            board = Board.new
+            board.cells = [
+                ['O','O','X','O','X','O','O'],
+                ['O','X','X','X','O','O','X'],
+                ['O','X','O','O','X','X','X'],
+                ['X','X','X','O','O','O','X'],
+                ['X','O','O','X','X','O','O'],
+                ['X','X','X','O','O','X','X']
+            ]
+            expect(board.board_full?).to be true
+        end
+            
+
     end
 end
