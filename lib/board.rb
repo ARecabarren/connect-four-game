@@ -1,7 +1,26 @@
 class Board
     attr_reader :cells
+    attr_accessor :cells
     def initialize
         @cells = Array.new(6) {Array.new(7) {''} }
+        @players = ['X', 'O']
+        @current_player = @players.sample
+    end
+
+    def play_game
+        loop do
+            display_board
+            column = ask_player_for_move
+            make_move(column, @current_player)
+            
+            if game_over?
+                display_board
+                puts "Game Over!"
+                break
+            end
+      
+            switch_player
+        end
     end
 
     def make_move(column, player_piece)
@@ -36,12 +55,18 @@ class Board
         end
     end
 
-    # def switch_player
-    #     @current_player = @players.find{|player| != @current_player}
-    # end
+    def switch_player
+        @current_player = @players.find { |player| player != @current_player }
+    end
 
     def game_over?
-        
+        return true if check_winner || board_full?
+        false
+    end
+
+    def board_full?
+        return true if @cells.flatten.none?('')
+        false
     end
 
     def check_winner
