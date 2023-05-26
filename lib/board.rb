@@ -3,15 +3,16 @@ class Board
     attr_accessor :cells, :player2, :player1
     def initialize
         @cells = Array.new(6) {Array.new(7) {''} }
-        @players = ['X', 'O']
-        @current_player = @players.sample
     end
 
     def play_game
         set_players
         loop do
             display_board
-            column = ask_player_for_move            
+            column = ask_player_for_move
+            until valid_column?(column)
+                column = ask_player_for_move    
+            end            
             make_move(column, @current_player[:symbol])
             if game_over?
                 display_board
@@ -31,7 +32,7 @@ class Board
 
         @player1 = {name: player1_name, symbol: 'X'}
         @player2 = {name: player2_name, symbol: 'O'}
-
+        @players = [@player1, @player2]
         @current_player = @player1
     end
 
@@ -62,10 +63,18 @@ class Board
     end
 
     def display_board
+        puts '  1 2 3 4 5 6 7' 
         @cells.each do |row|
-            puts row.join(' ')
+            row_str = row.map{|cell| format_cell(cell)}.join(' ')
+            puts "  #{row_str}"
         end
-        puts '1 2 3 4 5 6 7' 
+    end
+
+    def format_cell(cell)
+        return ' ' if cell.nil?
+        return "\u2610" if cell.empty?
+
+        cell == 'X'? "\u278a" : "\u278b"
     end
 
     def switch_player
